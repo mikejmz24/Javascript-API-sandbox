@@ -1,4 +1,4 @@
-const users = [];
+let users = [];
 let id = 1;
 
 const user = {
@@ -51,7 +51,13 @@ function findUserIndex(userId) {
 	return (i = users.map((e) => e.id).indexOf(userId));
 }
 
+function deleteAllUsers() {
+	users = [];
+	return true;
+}
+
 module.exports.createUser = createUser;
 module.exports.viewUser = viewUser;
 module.exports.viewAllUsers = viewAllUsers;
 module.exports.deleteUser = deleteUser;
+module.exports.deleteAllUsers = deleteAllUsers;
