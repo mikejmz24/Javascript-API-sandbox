@@ -8,23 +8,6 @@ const user = {
 	age: 0,
 };
 
-function viewUser(userId) {
-	let i = findUserIndex(userId);
-	if (i != -1) {
-		return users[i];
-	} else {
-		return null;
-	}
-}
-
-function viewAllUsers() {
-	if (users.length < 1) {
-		return null;
-	} else {
-		return users;
-	}
-}
-
 function createUser(firstName, lastName, age) {
 	let newUser = Object.create(user);
 	newUser.id = id;
@@ -36,8 +19,33 @@ function createUser(firstName, lastName, age) {
 	return newUser;
 }
 
-function deleteUser(userId) {
-	let i = findUserIndex(userId);
+function viewAllUsers() {
+	return users.length > 1 ? users : null;
+}
+
+function findUserById(userId) {
+	return query(["id"], [userId]);
+}
+
+function findUsersByFirstName(firstName) {
+	return query(["firstName"], [firstName]);
+}
+
+function findUsersByFullName(fullName) {
+	res = users.filter(
+		(element) => element.firstName + " " + element.lastName == fullName
+	);
+	return res.length > 0 ? res : null;
+}
+
+function deleteAllUsers() {
+	users = [];
+	id = 1;
+	return true;
+}
+
+function deleteUserById(userId) {
+	let i = findFirstUserIndex(userId, "id");
 	if (i != -1) {
 		let deletedUser = users[i];
 		users.splice(i, 1);
@@ -47,17 +55,46 @@ function deleteUser(userId) {
 	}
 }
 
-function findUserIndex(userId) {
-	return (i = users.map((e) => e.id).indexOf(userId));
+function query(keys, values) {
+	let queryKeys = getParams(keys);
+	let queryValues = getParams(values);
+	let keyValues = getKeyValues(queryKeys, queryValues);
+	let res = filteredUsers(keyValues);
+	return res.length > 0 ? res : null;
 }
 
-function deleteAllUsers() {
-	users = [];
-	return true;
+function findFirstUserIndex(userId, property) {
+	return users.map((element) => element[property]).indexOf(userId);
+}
+
+function getParams(...args) {
+	return args;
+}
+
+function getKeyValues(keys, values) {
+	let res = {};
+	keys.forEach((key, i) => {
+		res[key] = values[i];
+	});
+	return res;
+}
+
+function filteredUsers(keyValues) {
+	let keys = Object.keys(keyValues);
+	let values = Object.values(keyValues);
+	let res = [];
+	for (let i = 0; i <= keys.length - 1; i++) {
+		res = users.filter((element) => {
+			return element[keys[i]] == values[i];
+		});
+		return res;
+	}
 }
 
 module.exports.createUser = createUser;
-module.exports.viewUser = viewUser;
+module.exports.findUserById = findUserById;
+module.exports.findUsersByFullName = findUsersByFullName;
+module.exports.findUsersByFirstName = findUsersByFirstName;
 module.exports.viewAllUsers = viewAllUsers;
-module.exports.deleteUser = deleteUser;
+module.exports.deleteUserById = deleteUserById;
 module.exports.deleteAllUsers = deleteAllUsers;
