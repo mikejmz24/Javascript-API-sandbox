@@ -56,8 +56,8 @@ function deleteUserById(userId) {
 }
 
 function query(keys, values) {
-	let queryKeys = getParams(keys);
-	let queryValues = getParams(values);
+	let queryKeys = getParams(keys)[0];
+	let queryValues = getParams(values)[0];
 	let keyValues = getKeyValues(queryKeys, queryValues);
 	let res = filteredUsers(keyValues);
 	return res.length > 0 ? res : null;
@@ -87,8 +87,8 @@ function filteredUsers(keyValues) {
 		res = users.filter((element) => {
 			return element[keys[i]] == values[i];
 		});
-		return res;
 	}
+	return res;
 }
 
 module.exports.createUser = createUser;
@@ -98,3 +98,4 @@ module.exports.findUsersByFirstName = findUsersByFirstName;
 module.exports.viewAllUsers = viewAllUsers;
 module.exports.deleteUserById = deleteUserById;
 module.exports.deleteAllUsers = deleteAllUsers;
+module.exports.query = query;

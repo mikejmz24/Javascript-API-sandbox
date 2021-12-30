@@ -193,3 +193,111 @@ describe("Created users are automatically assigned an auto incremental ID", () =
 		return api.deleteAllUsers();
 	});
 });
+
+describe("Query for all users that are named Don Julio and have an age of 1", () => {
+	const users2 = [
+		{ id: 1, firstName: "Jack", lastName: "Daniels", age: 33 },
+		{ id: 2, firstName: "Jim", lastName: "Bean", age: 44 },
+		{ id: 3, firstName: "Johnny", lastName: "Walker", age: 55 },
+		{ id: 4, firstName: "Elijah", lastName: "Craig", age: 66 },
+		{ id: 5, firstName: "Don Julio", lastName: "Cristalino", age: 70 },
+		{ id: 6, firstName: "Bacardi", lastName: "Limon", age: 77 },
+		{ id: 7, firstName: "Don Julio", lastName: "Blanco", age: 1 },
+		{ id: 8, firstName: "Don Julio", lastName: "Reposado", age: 1 },
+		{ id: 9, firstName: "Don Julio", lastName: "Añejo", age: 3 },
+	];
+	beforeAll(() => {
+		return api.deleteAllUsers();
+	});
+	it("Begins by creating user Jack Daniels", () => {
+		expect(api.createUser("Jack", "Daniels", 33)).toEqual({
+			id: 1,
+			firstName: "Jack",
+			lastName: "Daniels",
+			age: 33,
+		});
+	});
+	it("Continues by creating user Jim Bean", () => {
+		expect(api.createUser("Jim", "Bean", 44)).toEqual({
+			id: 2,
+			firstName: "Jim",
+			lastName: "Bean",
+			age: 44,
+		});
+	});
+	it("Continues by creating user Johnny Walker", () => {
+		expect(api.createUser("Johnny", "Walker", 55)).toEqual({
+			id: 3,
+			firstName: "Johnny",
+			lastName: "Walker",
+			age: 55,
+		});
+	});
+	it("Continues by creating user Elijah Craig", () => {
+		expect(api.createUser("Elijah", "Craig", 66)).toEqual({
+			id: 4,
+			firstName: "Elijah",
+			lastName: "Craig",
+			age: 66,
+		});
+	});
+	it("Continues by creating user Don Julio Cristalino", () => {
+		expect(api.createUser("Don Julio", "Cristalino", 70)).toEqual({
+			id: 5,
+			firstName: "Don Julio",
+			lastName: "Cristalino",
+			age: 70,
+		});
+	});
+	it("Continues by creating user Bacardi Limon", () => {
+		expect(api.createUser("Bacardi", "Limon", 77)).toEqual({
+			id: 6,
+			firstName: "Bacardi",
+			lastName: "Limon",
+			age: 77,
+		});
+	});
+	it("Continues by creating user Don Julio Blanco", () => {
+		expect(api.createUser("Don Julio", "Blanco", 1)).toEqual({
+			id: 7,
+			firstName: "Don Julio",
+			lastName: "Blanco",
+			age: 1,
+		});
+	});
+	it("Continues by creating user Don Julio Reposado", () => {
+		expect(api.createUser("Don Julio", "Reposado", 1)).toEqual({
+			id: 8,
+			firstName: "Don Julio",
+			lastName: "Reposado",
+			age: 1,
+		});
+	});
+	it("Continues by creating user Don Julio Añejo", () => {
+		expect(api.createUser("Don Julio", "Añejo", 3)).toEqual({
+			id: 9,
+			firstName: "Don Julio",
+			lastName: "Añejo",
+			age: 3,
+		});
+	});
+	it("Finishes by returning a list with two Don Julios that have 1 year of age", () => {
+		expect(api.query(["firstName", "age"], ["Don Julio", 1])).toEqual([
+			{
+				id: 7,
+				firstName: "Don Julio",
+				lastName: "Blanco",
+				age: 1,
+			},
+			{
+				id: 8,
+				firstName: "Don Julio",
+				lastName: "Reposado",
+				age: 1,
+			},
+		]);
+	});
+	afterAll(() => {
+		return api.deleteAllUsers();
+	});
+});
